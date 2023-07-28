@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:marvel_app_flutter/ui/constants/screen_factory/screen_factory.dart';
 
 abstract class MainNavigationRoutesNames {
-  static const splashScreen = "/";
+  static const splashScreen = "/splash";
   static const authMovieDb = "/authTheMovieDB";
   static const homeMovieDb = "/homeTheMovieDB";
   static const movieDetail = "/homeTheMovieDB/movieDetail";

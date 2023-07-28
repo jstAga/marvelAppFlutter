@@ -3,7 +3,7 @@ import 'package:marvel_app_flutter/data/core/network/api_client_exception.dart';
 import 'package:marvel_app_flutter/data/local/data_provider/session_data_provider.dart';
 import 'package:marvel_app_flutter/data/remote/api_client/movies_api_client.dart';
 import 'package:marvel_app_flutter/data/remote/entity/detail_movie/movie_details.dart';
-import 'package:marvel_app_flutter/data/remote/movie_db_constants.dart';
+import 'package:marvel_app_flutter/data/core/network/configurations.dart';
 
 
 class MovieDetailsModel extends ChangeNotifier {

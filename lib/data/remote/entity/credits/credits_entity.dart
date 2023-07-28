@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:marvel_app_flutter/data/remote/movie_db_constants.dart';
+import 'package:marvel_app_flutter/data/core/network/configurations.dart';
 
 part 'credits_entity.g.dart';
 
@@ -49,7 +49,7 @@ class Cast {
 
   Map<String, dynamic> toJson() => _$CastToJson(this);
 
-  get profileImage => MovieDbConstants.baseImage + (profilePath ?? "");
+  get profileImage => Configurations.baseImage + (profilePath ?? "");
 
 }
 

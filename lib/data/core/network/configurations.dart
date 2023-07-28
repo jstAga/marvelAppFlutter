@@ -1,4 +1,4 @@
-class MovieDbConstants {
+class Configurations {
   static const baseUrl = "https://api.themoviedb.org/3";
   static const apiKey = "db4f25ed06d95e5c2ca4d4695470a0dd";
   static const baseImage = "https://image.tmdb.org/t/p/w500";
