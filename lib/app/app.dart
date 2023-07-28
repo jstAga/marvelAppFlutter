@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:marvel_app_flutter/app/app_view_model.dart';
-import 'package:marvel_app_flutter/ui/core/bases/base_providers.dart';
 import 'package:marvel_app_flutter/ui/core/movie_db_constants.dart';
 import 'package:marvel_app_flutter/ui/main_navigation/main_navigation.dart';
 
@@ -12,11 +10,10 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = InheritedProvider.read<AppViewModel>(context);
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      initialRoute: _mainNavigation.initialRoute(model?.isAuth == true),
+      initialRoute: MainNavigationRoutesNames.splashScreen,
       routes: _mainNavigation.routes,
       onGenerateRoute: _mainNavigation.onGenerateRoute,
       localizationsDelegates: const [
