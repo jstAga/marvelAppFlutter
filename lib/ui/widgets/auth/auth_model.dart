@@ -3,11 +3,15 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:marvel_app_flutter/data/core/network/api_client_exception.dart';
 import 'package:marvel_app_flutter/data/local/data_provider/session_data_provider.dart';
+import 'package:marvel_app_flutter/data/remote/api_client/account_api_client.dart';
 import 'package:marvel_app_flutter/data/remote/api_client/auth_api_client.dart';
 import 'package:marvel_app_flutter/ui/main_navigation/main_navigation.dart';
+import 'package:marvel_app_flutter/ui/widgets/auth/auth_repository/auth_repository.dart';
 
 class AuthModel extends ChangeNotifier {
-  final _apiClient = AuthApiClient();
+  final _authRepository = AuthRepository();
+  final _authApiClient = AuthApiClient();
+  final _accountApiClient = AccountApiClient();
   final _sessionDataProvider = SessionDataProvider();
   final usernameTextController = TextEditingController();
   final passwordTextController = TextEditingController();
@@ -34,8 +38,9 @@ class AuthModel extends ChangeNotifier {
     String? sessionId;
     int? accountId;
     try {
-      sessionId = await _apiClient.auth(username: username, password: password);
-      accountId = await _apiClient.getAccountInfo(sessionId);
+      // await _authRepository.login(username, password);
+      sessionId = await _authApiClient.auth(username: username, password: password);
+      accountId = await _accountApiClient.getAccountInfo(sessionId);
     } on ApiClientException catch (e) {
       switch (e.type) {
         case ApiClientExceptionType.network:

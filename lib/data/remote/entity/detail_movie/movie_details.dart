@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:marvel_app_flutter/data/remote/entity/credits/credits_entity.dart';
 import 'package:marvel_app_flutter/data/remote/entity/data_ext.dart';
 import 'package:marvel_app_flutter/data/remote/entity/trailer/trailer_entity.dart';
-import 'package:marvel_app_flutter/data/remote/movie_db_constants.dart';
+import 'package:marvel_app_flutter/data/core/network/configurations.dart';
 
 part 'movie_details.g.dart';
 
@@ -123,9 +123,9 @@ class MovieDetailsEntity {
 
   Map<String, dynamic> toJson() => _$MovieDetailsEntityToJson(this);
 
-  get poster => MovieDbConstants.baseImage + (posterPath ?? "");
+  get poster => Configurations.baseImage + (posterPath ?? "");
 
-  get backdrop => MovieDbConstants.baseImage + (backdropPath ?? "");
+  get backdrop => Configurations.baseImage + (backdropPath ?? "");
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)

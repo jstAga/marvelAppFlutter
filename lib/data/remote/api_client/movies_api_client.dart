@@ -3,14 +3,14 @@ import 'dart:io';
 import 'package:marvel_app_flutter/data/core/network/base_api_client.dart';
 import 'package:marvel_app_flutter/data/remote/entity/detail_movie/movie_details.dart';
 import 'package:marvel_app_flutter/data/remote/entity/movie_response/movie_response.dart';
-import 'package:marvel_app_flutter/data/remote/movie_db_constants.dart';
+import 'package:marvel_app_flutter/data/core/network/configurations.dart';
 
 
 class MoviesApiClient {
-  final _baseApiClient = BaseApiClient(
-      host: MovieDbConstants.baseUrl,
+  final _apiClient = BaseApiClient(
+      host: Configurations.baseUrl,
       client: HttpClient(),
-      apiKey: MovieDbConstants.apiKey);
+      apiKey: Configurations.apiKey);
 
   MovieResponse _movieResponseParser(dynamic json) {
     final jsonMap = json as Map<String, dynamic>;
@@ -19,9 +19,9 @@ class MoviesApiClient {
   }
 
   Future<MovieResponse> getMovies(int page, String language) async {
-    final result = _baseApiClient.get(
-        MovieDbConstants.getMovies, _movieResponseParser, <String, dynamic>{
-      "api_key": MovieDbConstants.apiKey,
+    final result = _apiClient.get(
+        Configurations.getMovies, _movieResponseParser, <String, dynamic>{
+      "api_key": Configurations.apiKey,
       "page": page.toString(),
       "language": language,
     });
@@ -29,9 +29,9 @@ class MoviesApiClient {
   }
 
   Future<MovieResponse> searchMovies(String query, int page, String language) {
-    final result = _baseApiClient.get(
-        MovieDbConstants.searchMovie, _movieResponseParser, <String, dynamic>{
-      "api_key": MovieDbConstants.apiKey,
+    final result = _apiClient.get(
+        Configurations.searchMovie, _movieResponseParser, <String, dynamic>{
+      "api_key": Configurations.apiKey,
       "query": query,
       "page": page.toString(),
       "language": language,
@@ -46,10 +46,10 @@ class MoviesApiClient {
   }
 
   Future<MovieDetailsEntity> getDetails(int movieId, String language) {
-    final result = _baseApiClient.get(
-        "${MovieDbConstants.movieDetails}$movieId?",
+    final result = _apiClient.get(
+        "${Configurations.movieDetails}$movieId?",
         _movieDetailsParser, <String, dynamic>{
-      "api_key": MovieDbConstants.apiKey,
+      "api_key": Configurations.apiKey,
       "language": language,
       "append_to_response": "credits,videos"
     });
@@ -63,9 +63,9 @@ class MoviesApiClient {
   }
 
   Future<bool> isMovieSaved(int movieId, String sessionId) {
-    final result = _baseApiClient.get("/movie/$movieId/account_states?",
+    final result = _apiClient.get("/movie/$movieId/account_states?",
         _isMovieSavedParser, <String, dynamic>{
-      "api_key": MovieDbConstants.apiKey,
+      "api_key": Configurations.apiKey,
       "session_id": sessionId,
     });
     return result;
@@ -81,13 +81,13 @@ class MoviesApiClient {
       return 1;
     }
 
-    final result = _baseApiClient
+    final result = _apiClient
         .post("/account/$accountId/favorite?", parser, <String, dynamic>{
       "media_type": mediaType.asString(),
       "media_id": mediaId,
       "favorite": isSaved
     }, <String, dynamic>{
-      "api_key": MovieDbConstants.apiKey,
+      "api_key": Configurations.apiKey,
       "session_id": sessionId
     });
     return result;

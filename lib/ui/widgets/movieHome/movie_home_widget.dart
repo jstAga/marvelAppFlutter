@@ -48,6 +48,7 @@ class _MovieHomeWidgetState extends State<MovieHomeWidget> {
         actions: [
           IconButton(
               onPressed: () => model?.onSessionExpired?.call(),
+              // onPressed: () => logout,
               icon: const Icon(Icons.logout))
         ],
       ),
