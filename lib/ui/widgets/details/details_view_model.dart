@@ -6,8 +6,8 @@ import 'package:marvel_app_flutter/data/remote/entity/detail_movie/movie_details
 import 'package:marvel_app_flutter/data/core/network/configurations.dart';
 
 
-class MovieDetailsModel extends ChangeNotifier {
-  MovieDetailsModel({required this.movieId});
+class DetailsViewModel extends ChangeNotifier {
+  DetailsViewModel({required this.movieId});
 
   final _apiClient = MoviesApiClient();
   final _sessionDataProvider = SessionDataProvider();
@@ -68,7 +68,6 @@ class MovieDetailsModel extends ChangeNotifier {
         onSessionExpired?.call();
         break;
       default:
-        print(e);
         break;
     }
   }

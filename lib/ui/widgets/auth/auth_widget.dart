@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:marvel_app_flutter/ui/core/bases/base_providers.dart';
-import 'package:marvel_app_flutter/ui/core/bases/bases_ext.dart';
-import 'package:marvel_app_flutter/ui/core/movie_db_constants.dart';
-import 'package:marvel_app_flutter/ui/widgets/auth/auth_model.dart';
+import 'package:marvel_app_flutter/ui/constants/bases/base_providers.dart';
+import 'package:marvel_app_flutter/ui/constants/bases/bases_ext.dart';
+import 'package:marvel_app_flutter/ui/constants/movie_db_constants.dart';
+import 'package:marvel_app_flutter/ui/widgets/auth/auth_view_model.dart';
 
 class AuthWidget extends StatefulWidget {
   const AuthWidget({Key? key}) : super(key: key);
@@ -77,7 +77,7 @@ class _LoginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = NotifierProvider.read<AuthModel>(context);
+    final model = NotifierProvider.read<AuthViewModel>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -125,7 +125,7 @@ class _LoginForm extends StatelessWidget {
 class _AuthButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final model = NotifierProvider.watch<AuthModel>(context);
+    final model = NotifierProvider.watch<AuthViewModel>(context);
     final onPressed =
         model?.canStartAuth == true ? () => model?.auth(context) : null;
     final Widget child;
@@ -145,7 +145,7 @@ class _ErrorMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final errorMessage =
-        NotifierProvider.watch<AuthModel>(context)?.errorMessage;
+        NotifierProvider.watch<AuthViewModel>(context)?.errorMessage;
     if (errorMessage == null) return const SizedBox.shrink();
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),

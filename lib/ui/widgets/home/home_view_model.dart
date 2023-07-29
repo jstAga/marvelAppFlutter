@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
 
-class MovieHomeModel extends ChangeNotifier {
+class HomeViewModel extends ChangeNotifier {
   Future<void>? Function()? onSessionExpired;
 }

@@ -7,7 +7,7 @@ import 'package:marvel_app_flutter/data/remote/api_client/account_api_client.dar
 import 'package:marvel_app_flutter/data/remote/api_client/auth_api_client.dart';
 import 'package:marvel_app_flutter/ui/main_navigation/main_navigation.dart';
 
-class AuthModel extends ChangeNotifier {
+class AuthViewModel extends ChangeNotifier {
   final _authApiClient = AuthApiClient();
   final _accountApiClient = AccountApiClient();
   final _sessionDataProvider = SessionDataProvider();

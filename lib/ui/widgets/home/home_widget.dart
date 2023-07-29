@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:marvel_app_flutter/data/local/data_provider/session_data_provider.dart';
 import 'package:marvel_app_flutter/ui/constants/screen_factory/screen_factory.dart';
-import 'package:marvel_app_flutter/ui/core/movie_db_constants.dart';
+import 'package:marvel_app_flutter/ui/constants/movie_db_constants.dart';
 
 class HomeWidget extends StatefulWidget {
   const HomeWidget({Key? key}) : super(key: key);

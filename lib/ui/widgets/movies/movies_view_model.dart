@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:marvel_app_flutter/data/remote/entity/movie/movie_entity.dart';
-import 'package:marvel_app_flutter/ui/core/bases/base_paging.dart';
+import 'package:marvel_app_flutter/ui/constants/bases/base_paging.dart';
 import 'package:marvel_app_flutter/ui/entity/movie/movie_ui.dart';
 import 'package:marvel_app_flutter/ui/main_navigation/main_navigation.dart';
 import 'package:marvel_app_flutter/ui/widgets/movies/repository/movie_repository.dart';

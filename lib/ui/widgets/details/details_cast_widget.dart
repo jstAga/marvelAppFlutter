@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:marvel_app_flutter/ui/core/bases/base_providers.dart';
-import 'package:marvel_app_flutter/ui/core/bases/bases_ext.dart';
-import 'package:marvel_app_flutter/ui/widgets/movieDetail/movie_details_model.dart';
+import 'package:marvel_app_flutter/ui/constants/bases/base_providers.dart';
+import 'package:marvel_app_flutter/ui/constants/bases/bases_ext.dart';
+import 'package:marvel_app_flutter/ui/widgets/details/details_view_model.dart';
 
-class MovieDetailsScreenCast extends StatelessWidget {
-  const MovieDetailsScreenCast({Key? key}) : super(key: key);
+class DetailsCastWidget extends StatelessWidget {
+  const DetailsCastWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,7 @@ class _CastItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = NotifierProvider.read<MovieDetailsModel>(context);
+    final model = NotifierProvider.read<DetailsViewModel>(context);
     final cast = model!.movieDetails!.credits!.cast[index];
     return Padding(
         padding: const EdgeInsets.all(8.0),

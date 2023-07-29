@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:marvel_app_flutter/data/remote/entity/credits/credits_entity.dart';
-import 'package:marvel_app_flutter/ui/core/bases/base_providers.dart';
-import 'package:marvel_app_flutter/ui/core/bases/bases_ext.dart';
+import 'package:marvel_app_flutter/ui/constants/bases/base_providers.dart';
+import 'package:marvel_app_flutter/ui/constants/bases/bases_ext.dart';
 import 'package:marvel_app_flutter/ui/main_navigation/main_navigation.dart';
-import 'package:marvel_app_flutter/ui/widgets/movieDetail/movie_details_model.dart';
+import 'package:marvel_app_flutter/ui/widgets/details/details_view_model.dart';
 
-class MovieDetailsMainInfo extends StatelessWidget {
-  const MovieDetailsMainInfo({super.key});
+class DetailsMainWidget extends StatelessWidget {
+  const DetailsMainWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class _Score extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final movieDetails =
-        NotifierProvider.watch<MovieDetailsModel>(context)?.movieDetails;
+        NotifierProvider.watch<DetailsViewModel>(context)?.movieDetails;
     final voteAverage = movieDetails?.voteAverage ?? 0;
     final videos = movieDetails?.videos?.results
         .where((video) => video.type == "Trailer" && video.site == "YouTube");
@@ -62,7 +62,7 @@ class _CrewInfo extends StatelessWidget {
   @override
   build(BuildContext context) {
     final List<List<Crew>> crewChunks =
-        NotifierProvider.watch<MovieDetailsModel>(context)
+        NotifierProvider.watch<DetailsViewModel>(context)
             ?.movieDetails
             ?.crewChunks;
 
@@ -121,7 +121,7 @@ class _Description extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final model =
-        NotifierProvider.watch<MovieDetailsModel>(context)?.movieDetails;
+        NotifierProvider.watch<DetailsViewModel>(context)?.movieDetails;
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Text(model?.overview ?? "",
@@ -147,7 +147,7 @@ class _Overview extends StatelessWidget {
 class _TopPoster extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final model = NotifierProvider.watch<MovieDetailsModel>(context);
+    final model = NotifierProvider.watch<DetailsViewModel>(context);
     final backdropPath = model?.movieDetails?.backdrop;
     final posterPath = model?.movieDetails?.poster;
     final saveIcon = model!.isMovieSaved == true
@@ -185,7 +185,7 @@ class _MovieName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final model =
-        NotifierProvider.watch<MovieDetailsModel>(context)?.movieDetails;
+        NotifierProvider.watch<DetailsViewModel>(context)?.movieDetails;
     return Center(
       child: RichText(
         textAlign: TextAlign.center,
@@ -212,7 +212,7 @@ class _MovieInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final model =
-        NotifierProvider.watch<MovieDetailsModel>(context)?.movieDetails;
+        NotifierProvider.watch<DetailsViewModel>(context)?.movieDetails;
     return ColoredBox(
       color: const Color.fromRGBO(22, 21, 25, 1.0),
       child: Padding(
