@@ -38,4 +38,9 @@ class MainNavigation {
     }
     return null;
   }
+
+  static void resetNavigation(BuildContext context) {
+    Navigator.pushNamedAndRemoveUntil(
+        context, MainNavigationRoutesNames.splashScreen, (route) => false);
+  }
 }

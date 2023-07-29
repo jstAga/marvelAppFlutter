@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:marvel_app_flutter/ui/constants/bases/base_providers.dart';
+
 import 'package:marvel_app_flutter/ui/constants/bases/bases_ext.dart';
 import 'package:marvel_app_flutter/ui/constants/movie_db_constants.dart';
 import 'package:marvel_app_flutter/ui/widgets/auth/auth_view_model.dart';
+import 'package:provider/provider.dart';
 
-class AuthWidget extends StatefulWidget {
+class AuthWidget extends StatelessWidget {
   const AuthWidget({Key? key}) : super(key: key);
 
-  @override
-  State<AuthWidget> createState() => _AuthWidgetState();
-}
-
-class _AuthWidgetState extends State<AuthWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,9 +20,7 @@ class _AuthWidgetState extends State<AuthWidget> {
           padding: const EdgeInsets.all(16),
           children: const [
             _LoginForm(),
-            SizedBox(
-              height: 24,
-            ),
+            SizedBox(height: 24),
             _MainContainer(),
           ],
         ));
@@ -43,28 +37,20 @@ class _MainContainer extends StatelessWidget {
     return Column(
       children: [
         const Text(MovieDbConstants.theMovieDbHeader1, style: textStyle),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         const Text(MovieDbConstants.theMovieDbHeader2, style: textStyle),
-        const SizedBox(
-          height: 20,
-        ),
+        const SizedBox(height: 2),
         Row(
           children: [
             TextButton(
-              onPressed: () {},
-              style: MovieDbConstants.baseTheMovieDbButton,
-              child: const Text(MovieDbConstants.theMovieDbRegister),
-            ),
-            const SizedBox(
-              width: 24,
-            ),
+                onPressed: () {},
+                style: MovieDbConstants.baseTheMovieDbButton,
+                child: const Text(MovieDbConstants.theMovieDbRegister)),
+            const SizedBox(width: 24),
             TextButton(
-              onPressed: () {},
-              style: MovieDbConstants.baseTheMovieDbButton,
-              child: const Text(MovieDbConstants.theMovieDbVerifyEmail),
-            )
+                onPressed: () {},
+                style: MovieDbConstants.baseTheMovieDbButton,
+                child: const Text(MovieDbConstants.theMovieDbVerifyEmail))
           ],
         )
       ],
@@ -77,34 +63,24 @@ class _LoginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = NotifierProvider.read<AuthViewModel>(context);
+    final viewModel = context.read<AuthViewModel>();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const _ErrorMessage(),
-        Text(
-          MovieDbConstants.theMovieDbUsername,
-          style: BaseTextStyle.baseSimilarText(Colors.black),
-        ),
+        Text(MovieDbConstants.theMovieDbUsername,
+            style: BaseTextStyle.baseSimilarText(Colors.black)),
         TextField(
-          decoration: MovieDbConstants.authInputDecoration,
-          controller: model?.usernameTextController,
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        Text(
-          MovieDbConstants.theMovieDbPassword,
-          style: BaseTextStyle.baseSimilarText(Colors.black),
-        ),
+            decoration: MovieDbConstants.authInputDecoration,
+            controller: viewModel.usernameTextController),
+        const SizedBox(height: 16),
+        Text(MovieDbConstants.theMovieDbPassword,
+            style: BaseTextStyle.baseSimilarText(Colors.black)),
         TextField(
-          decoration: MovieDbConstants.authInputDecoration,
-          obscureText: true,
-          controller: model?.passwordTextController,
-        ),
-        const SizedBox(
-          height: 24,
-        ),
+            decoration: MovieDbConstants.authInputDecoration,
+            obscureText: true,
+            controller: viewModel.passwordTextController),
+        const SizedBox(height: 24),
         Row(
           children: [
             _AuthButton(),
@@ -112,9 +88,7 @@ class _LoginForm extends StatelessWidget {
             TextButton(
                 style: MovieDbConstants.baseTheMovieDbLinkButton,
                 onPressed: () {},
-                child: const Text(
-                  MovieDbConstants.theMovieDbResetPassword,
-                )),
+                child: const Text(MovieDbConstants.theMovieDbResetPassword)),
           ],
         )
       ],
@@ -125,16 +99,16 @@ class _LoginForm extends StatelessWidget {
 class _AuthButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final model = NotifierProvider.watch<AuthViewModel>(context);
+    final model = context.watch<AuthViewModel>();
     final onPressed =
-        model?.canStartAuth == true ? () => model?.auth(context) : null;
+        model.canStartAuth == true ? () => model.auth(context) : null;
     final Widget child;
-    child = model?.isAuthInProgress == true
+    child = model.isAuthInProgress == true
         ? MovieDbConstants.loadingButton
         : const Text(MovieDbConstants.theMovieDbLogin);
     return ElevatedButton(
         style: MovieDbConstants.baseTheMovieDbButton,
-        onPressed:  onPressed,
+        onPressed: onPressed,
         child: child);
   }
 }
@@ -144,8 +118,7 @@ class _ErrorMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final errorMessage =
-        NotifierProvider.watch<AuthViewModel>(context)?.errorMessage;
+    final errorMessage = context.select((AuthViewModel vm) => vm.errorMessage);
     if (errorMessage == null) return const SizedBox.shrink();
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
