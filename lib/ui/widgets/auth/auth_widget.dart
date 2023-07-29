@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:marvel_app_flutter/ui/core/bases/base_providers.dart';
-import 'package:marvel_app_flutter/ui/core/bases_ext.dart';
+import 'package:marvel_app_flutter/ui/core/bases/bases_ext.dart';
 import 'package:marvel_app_flutter/ui/core/movie_db_constants.dart';
-import 'package:marvel_app_flutter/ui/main_navigation/main_navigation.dart';
 import 'package:marvel_app_flutter/ui/widgets/auth/auth_model.dart';
 
 class AuthWidget extends StatefulWidget {

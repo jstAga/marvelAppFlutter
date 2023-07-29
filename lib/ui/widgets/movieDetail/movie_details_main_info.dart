@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:marvel_app_flutter/data/remote/entity/credits/credits_entity.dart';
 import 'package:marvel_app_flutter/ui/core/bases/base_providers.dart';
-import 'package:marvel_app_flutter/ui/core/bases_ext.dart';
+import 'package:marvel_app_flutter/ui/core/bases/bases_ext.dart';
 import 'package:marvel_app_flutter/ui/main_navigation/main_navigation.dart';
 import 'package:marvel_app_flutter/ui/widgets/movieDetail/movie_details_model.dart';
 

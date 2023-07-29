@@ -18,9 +18,15 @@ class MoviesApiClient {
     return response;
   }
 
+  MovieResponse _movieResponseParser1(dynamic json) {
+    final jsonMap = json as Map<String, dynamic>;
+    final response = MovieResponse.fromJson(jsonMap);
+    return response;
+  }
+
   Future<MovieResponse> getMovies(int page, String language) async {
     final result = _apiClient.get(
-        Configurations.getMovies, _movieResponseParser, <String, dynamic>{
+        Configurations.getMovies, _movieResponseParser1, <String, dynamic>{
       "api_key": Configurations.apiKey,
       "page": page.toString(),
       "language": language,

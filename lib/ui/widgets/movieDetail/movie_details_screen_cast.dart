@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:marvel_app_flutter/ui/core/bases/base_providers.dart';
-import 'package:marvel_app_flutter/ui/core/bases_ext.dart';
+import 'package:marvel_app_flutter/ui/core/bases/bases_ext.dart';
 import 'package:marvel_app_flutter/ui/widgets/movieDetail/movie_details_model.dart';
 
 class MovieDetailsScreenCast extends StatelessWidget {

@@ -3,7 +3,7 @@ import 'package:marvel_app_flutter/data/remote/entity/movie/movie_entity.dart';
 
 part 'movie_response.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, fieldRename: FieldRename.snake)
 class MovieResponse {
   MovieResponse(
       {required this.page,

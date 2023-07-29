@@ -6,10 +6,8 @@ import 'package:marvel_app_flutter/data/local/data_provider/session_data_provide
 import 'package:marvel_app_flutter/data/remote/api_client/account_api_client.dart';
 import 'package:marvel_app_flutter/data/remote/api_client/auth_api_client.dart';
 import 'package:marvel_app_flutter/ui/main_navigation/main_navigation.dart';
-import 'package:marvel_app_flutter/ui/widgets/auth/auth_repository/auth_repository.dart';
 
 class AuthModel extends ChangeNotifier {
-  final _authRepository = AuthRepository();
   final _authApiClient = AuthApiClient();
   final _accountApiClient = AccountApiClient();
   final _sessionDataProvider = SessionDataProvider();
