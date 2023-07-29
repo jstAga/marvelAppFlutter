@@ -1,16 +1,16 @@
 import 'package:flutter/cupertino.dart';
-import 'package:marvel_app_flutter/ui/core/bases/base_providers.dart';
-import 'package:marvel_app_flutter/ui/widgets/auth/auth_model.dart';
+import 'package:marvel_app_flutter/ui/constants/bases/base_providers.dart';
+import 'package:marvel_app_flutter/ui/widgets/auth/auth_view_model.dart';
 import 'package:marvel_app_flutter/ui/widgets/auth/auth_widget.dart';
-import 'package:marvel_app_flutter/ui/widgets/movieDetail/movie_details.dart';
-import 'package:marvel_app_flutter/ui/widgets/movieDetail/movie_details_model.dart';
-import 'package:marvel_app_flutter/ui/widgets/movieHome/home_model.dart';
-import 'package:marvel_app_flutter/ui/widgets/movieHome/home_widget.dart';
-import 'package:marvel_app_flutter/ui/widgets/movieTrailer/movie_trailer_widget.dart';
+import 'package:marvel_app_flutter/ui/widgets/details/details_view_model.dart';
+import 'package:marvel_app_flutter/ui/widgets/details/details_widget.dart';
+import 'package:marvel_app_flutter/ui/widgets/home/home_view_model.dart';
+import 'package:marvel_app_flutter/ui/widgets/home/home_widget.dart';
 import 'package:marvel_app_flutter/ui/widgets/movies/movies_view_model.dart';
 import 'package:marvel_app_flutter/ui/widgets/movies/movies_widget.dart';
 import 'package:marvel_app_flutter/ui/widgets/splash_screen/splash_screen_view_model.dart';
 import 'package:marvel_app_flutter/ui/widgets/splash_screen/splash_screen_widget.dart';
+import 'package:marvel_app_flutter/ui/widgets/trailer/trailer_widget.dart';
 import 'package:provider/provider.dart';
 
 class ScreenFactory {
@@ -24,26 +24,26 @@ class ScreenFactory {
 
   Widget createAuthWidget() {
     return ChangeNotifierProvider(
-      create: (_) => AuthModel(),
+      create: (_) => AuthViewModel(),
       child: const AuthWidget(),
     );
   }
 
   Widget createHomeWidget() {
     return NotifierProvider(
-      create: () => MovieHomeModel(),
+      create: () => HomeViewModel(),
       child: const HomeWidget(),
     );
   }
 
   Widget createMovieDetailsWidget(int movieId) {
     return NotifierProvider(
-        create: () => MovieDetailsModel(movieId: movieId),
-        child: const MovieDetailsWidget());
+        create: () => DetailsViewModel(movieId: movieId),
+        child: const DetailsWidget());
   }
 
   Widget createMovieTrailerWidget(String trailerKey) {
-    return MovieTrailerWidget(trailerKey: trailerKey);
+    return TrailerWidget(trailerKey: trailerKey);
   }
 
   Widget createMoviesWidget() {

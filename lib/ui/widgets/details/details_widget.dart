@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:marvel_app_flutter/app/app_view_model.dart';
-import 'package:marvel_app_flutter/ui/core/bases/base_providers.dart';
-import 'package:marvel_app_flutter/ui/widgets/movieDetail/movie_details_main_info.dart';
-import 'package:marvel_app_flutter/ui/widgets/movieDetail/movie_details_model.dart';
-import 'package:marvel_app_flutter/ui/widgets/movieDetail/movie_details_screen_cast.dart';
+import 'package:marvel_app_flutter/ui/constants/bases/base_providers.dart';
+import 'package:marvel_app_flutter/ui/widgets/details/details_cast_widget.dart';
+import 'package:marvel_app_flutter/ui/widgets/details/details_main_widget.dart';
+import 'package:marvel_app_flutter/ui/widgets/details/details_view_model.dart';
 
-class MovieDetailsWidget extends StatefulWidget {
-  const MovieDetailsWidget({super.key});
+class DetailsWidget extends StatefulWidget {
+  const DetailsWidget({super.key});
 
   @override
-  State<MovieDetailsWidget> createState() => _MovieDetailsWidgetState();
+  State<DetailsWidget> createState() => _DetailsWidgetState();
 }
 
-class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
+class _DetailsWidgetState extends State<DetailsWidget> {
   @override
   void initState() {
     super.initState();
-    final model = NotifierProvider.read<MovieDetailsModel>(context);
+    final model = NotifierProvider.read<DetailsViewModel>(context);
     final appModel = InheritedProvider.read<AppViewModel>(context);
     model?.onSessionExpired = () => appModel?.resetSession(context);
   }
@@ -24,7 +24,7 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    NotifierProvider.read<MovieDetailsModel>(context)
+    NotifierProvider.read<DetailsViewModel>(context)
         ?.setupLocalization(context);
   }
 
@@ -48,15 +48,15 @@ class _Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final movieDetails =
-        NotifierProvider.watch<MovieDetailsModel>(context)?.movieDetails;
+        NotifierProvider.watch<DetailsViewModel>(context)?.movieDetails;
     if (movieDetails == null) {
       return const Center(child: CircularProgressIndicator());
     } else {
       return ListView(
         children: const [
-          MovieDetailsMainInfo(),
+          DetailsMainWidget(),
           SizedBox(height: 20),
-          MovieDetailsScreenCast()
+          DetailsCastWidget()
         ],
       );
     }
@@ -69,7 +69,7 @@ class _Title extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final model =
-        NotifierProvider.watch<MovieDetailsModel>(context)?.movieDetails;
+        NotifierProvider.watch<DetailsViewModel>(context)?.movieDetails;
     return Text(model?.title ?? "Loading", maxLines: 1);
   }
 }

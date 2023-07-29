@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-class MovieTrailerWidget extends StatefulWidget {
-  const MovieTrailerWidget({required this.trailerKey, super.key});
+class TrailerWidget extends StatefulWidget {
+  const TrailerWidget({required this.trailerKey, super.key});
 
   final String trailerKey;
 
   @override
-  State<MovieTrailerWidget> createState() => _MovieTrailerWidgetState();
+  State<TrailerWidget> createState() => _TrailerWidgetState();
 }
 
-class _MovieTrailerWidgetState extends State<MovieTrailerWidget> {
+class _TrailerWidgetState extends State<TrailerWidget> {
   late final _controller;
 
   @override
