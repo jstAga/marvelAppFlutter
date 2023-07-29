@@ -4,9 +4,11 @@ import 'package:marvel_app_flutter/ui/widgets/auth/auth_model.dart';
 import 'package:marvel_app_flutter/ui/widgets/auth/auth_widget.dart';
 import 'package:marvel_app_flutter/ui/widgets/movieDetail/movie_details.dart';
 import 'package:marvel_app_flutter/ui/widgets/movieDetail/movie_details_model.dart';
-import 'package:marvel_app_flutter/ui/widgets/movieHome/movie_home_model.dart';
-import 'package:marvel_app_flutter/ui/widgets/movieHome/movie_home_widget.dart';
+import 'package:marvel_app_flutter/ui/widgets/movieHome/home_model.dart';
+import 'package:marvel_app_flutter/ui/widgets/movieHome/home_widget.dart';
 import 'package:marvel_app_flutter/ui/widgets/movieTrailer/movie_trailer_widget.dart';
+import 'package:marvel_app_flutter/ui/widgets/movies/movies_view_model.dart';
+import 'package:marvel_app_flutter/ui/widgets/movies/movies_widget.dart';
 import 'package:marvel_app_flutter/ui/widgets/splash_screen/splash_screen_view_model.dart';
 import 'package:marvel_app_flutter/ui/widgets/splash_screen/splash_screen_widget.dart';
 import 'package:provider/provider.dart';
@@ -21,8 +23,8 @@ class ScreenFactory {
   }
 
   Widget createAuthWidget() {
-    return NotifierProvider(
-      create: () => AuthModel(),
+    return ChangeNotifierProvider(
+      create: (_) => AuthModel(),
       child: const AuthWidget(),
     );
   }
@@ -30,7 +32,7 @@ class ScreenFactory {
   Widget createHomeWidget() {
     return NotifierProvider(
       create: () => MovieHomeModel(),
-      child: const MovieHomeWidget(),
+      child: const HomeWidget(),
     );
   }
 
@@ -42,5 +44,20 @@ class ScreenFactory {
 
   Widget createMovieTrailerWidget(String trailerKey) {
     return MovieTrailerWidget(trailerKey: trailerKey);
+  }
+
+  Widget createMoviesWidget() {
+    return ChangeNotifierProvider(
+      create: (_) => MoviesViewModel(),
+      child: const MoviesWidget(),
+    );
+  }
+
+  Widget createFavoritesWidget() {
+    return const Text("Favorites");
+  }
+
+  Widget createComicsWidget() {
+    return const Text("Comics");
   }
 }

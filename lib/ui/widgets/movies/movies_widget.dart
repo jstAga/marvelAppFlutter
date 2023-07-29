@@ -1,92 +1,158 @@
 import 'package:flutter/material.dart';
-import 'package:marvel_app_flutter/data/remote/entity/movie/movie_entity.dart';
-import 'package:marvel_app_flutter/ui/core/bases/base_providers.dart';
 import 'package:marvel_app_flutter/ui/core/movie_db_constants.dart';
-import 'package:marvel_app_flutter/ui/widgets/movies/movies_model.dart';
+import 'package:marvel_app_flutter/ui/widgets/movies/movies_view_model.dart';
+import 'package:provider/provider.dart';
 
-class Movies extends StatefulWidget {
-  const Movies({Key? key}) : super(key: key);
+class MoviesWidget extends StatefulWidget {
+  const MoviesWidget({Key? key}) : super(key: key);
 
   @override
-  State<Movies> createState() => _MoviesState();
+  State<MoviesWidget> createState() => _MoviesWidgetState();
 }
 
-class _MoviesState extends State<Movies> {
+class _MoviesWidgetState extends State<MoviesWidget> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    context.read<MoviesViewModel>().setupLocalization(context);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final model = NotifierProvider.watch<MoviesModel>(context);
-    if (model == null) return const SizedBox.shrink();
-    return Stack(
-      children: [
-        ListView.builder(
-            padding: const EdgeInsets.only(top: 70),
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            itemCount: model.movies.length,
-            itemExtent: 163,
-            itemBuilder: (BuildContext context, int index) {
-              model.getCurrentMovieIndex(index);
-              final movie = model.movies[index];
-              return Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: Stack(
-                  children: [
-                    Container(
-                      decoration: MovieDbConstants.movieCardDecoration,
-                      clipBehavior: Clip.hardEdge,
-                      child: Row(
-                        children: [
-                          Image.network(
-                            movie.image,
-                            width: 95,
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  _Title(movie: movie),
-                                  const SizedBox(height: 5),
-                                  Text(
-                                    model.date(movie.releaseDate),
-                                    maxLines: 1,
-                                    style: const TextStyle(color: Colors.grey),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  _Overview(movie: movie),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(12),
-                        onTap: () => model.toDetail(context, index),
-                      ),
-                    )
-                  ],
-                ),
-              );
-            }),
-         _Search(model: model)
-      ],
+    return const Stack(
+      children: [_MovieListBuilder(), _Search()],
     );
   }
 }
 
-class _Overview extends StatelessWidget {
-  const _Overview({required this.movie});
-
-  final MovieEntity movie;
+class _MovieListBuilder extends StatelessWidget {
+  const _MovieListBuilder();
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = context.watch<MoviesViewModel>();
+
+    return ListView.builder(
+        padding: const EdgeInsets.only(top: 70),
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        itemCount: viewModel.movies.length,
+        itemExtent: 163,
+        itemBuilder: (BuildContext context, int index) {
+          viewModel.getCurrentMovieIndex(index);
+          return _MovieItem(index: index);
+        });
+  }
+}
+
+class _MovieItem extends StatelessWidget {
+  const _MovieItem({required this.index});
+
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Stack(
+        children: [
+          Container(
+            decoration: MovieDbConstants.movieCardDecoration,
+            clipBehavior: Clip.hardEdge,
+            child: Row(
+              children: [
+                _MoviePoster(index: index),
+                Expanded(
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _MovieTitle(index: index),
+                        const SizedBox(height: 5),
+                        _MovieDate(index: index),
+                        const SizedBox(height: 10),
+                        _MovieOverview(index: index),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          _ItemBackground(index: index)
+        ],
+      ),
+    );
+  }
+}
+
+class _ItemBackground extends StatelessWidget {
+  const _ItemBackground({
+    required this.index,
+  });
+
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    final viewModel = context.read<MoviesViewModel>();
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () => viewModel.toDetail(context, index),
+      ),
+    );
+  }
+}
+
+class _MovieDate extends StatelessWidget {
+  const _MovieDate({
+    required this.index,
+  });
+
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    final viewModel = context.read<MoviesViewModel>();
+    final movie = viewModel.movies[index];
+    return Text(
+      movie.releaseDate ?? "",
+      maxLines: 1,
+      style: const TextStyle(color: Colors.grey),
+    );
+  }
+}
+
+class _MoviePoster extends StatelessWidget {
+  const _MoviePoster({
+    required this.index,
+  });
+
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    final viewModel = context.read<MoviesViewModel>();
+    final movie = viewModel.movies[index];
+    return Image.network(
+      movie.image ?? "",
+      width: 95,
+    );
+  }
+}
+
+class _MovieOverview extends StatelessWidget {
+  const _MovieOverview({required this.index});
+
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    final viewModel = context.read<MoviesViewModel>();
+    final movie = viewModel.movies[index];
     return Text(
       movie.overview ?? "No description",
       maxLines: 3,
@@ -95,15 +161,17 @@ class _Overview extends StatelessWidget {
   }
 }
 
-class _Title extends StatelessWidget {
-  const _Title({
-    required this.movie,
+class _MovieTitle extends StatelessWidget {
+  const _MovieTitle({
+    required this.index,
   });
 
-  final MovieEntity movie;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = context.read<MoviesViewModel>();
+    final movie = viewModel.movies[index];
     return Text(movie.title ?? "No title",
         maxLines: 1,
         style:
@@ -112,16 +180,15 @@ class _Title extends StatelessWidget {
 }
 
 class _Search extends StatelessWidget {
-  const _Search({required this.model});
-
-  final MoviesModel model;
+  const _Search();
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = context.read<MoviesViewModel>();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       child: TextField(
-        onChanged: model.searchMovies,
+        onChanged: viewModel.searchMovies,
         // controller: _searchController,
         decoration: InputDecoration(
             labelText: "Search",
