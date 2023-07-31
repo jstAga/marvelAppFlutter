@@ -14,9 +14,15 @@ class AuthRepository {
   }
 
   Future<void> login(String username, String password) async {
-    final sessionId = await _authApiClient.auth(username: username, password: password);
+    final sessionId =
+        await _authApiClient.auth(username: username, password: password);
     final accountId = await _accountApiClient.getAccountInfo(sessionId);
     await _sessionDataProvider.setSessionId(sessionId);
     await _sessionDataProvider.setAccountId(accountId);
+  }
+
+  Future<void> logout() async {
+    await _sessionDataProvider.deleteSessionId();
+    await _sessionDataProvider.deleteSessionId();
   }
 }

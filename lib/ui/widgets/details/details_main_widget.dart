@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:marvel_app_flutter/data/remote/entity/credits/credits_entity.dart';
-import 'package:marvel_app_flutter/ui/constants/bases/base_providers.dart';
 import 'package:marvel_app_flutter/ui/constants/bases/bases_ext.dart';
+import 'package:marvel_app_flutter/ui/entity/movie_details/movie_details_ui.dart';
 import 'package:marvel_app_flutter/ui/main_navigation/main_navigation.dart';
 import 'package:marvel_app_flutter/ui/widgets/details/details_view_model.dart';
+import 'package:provider/provider.dart';
 
 class DetailsMainWidget extends StatelessWidget {
   const DetailsMainWidget({super.key});
@@ -11,13 +11,13 @@ class DetailsMainWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      _TopPoster(),
-      Padding(padding: const EdgeInsets.all(20), child: _MovieName()),
+      const _TopPoster(),
+      Padding(padding: const EdgeInsets.all(20), child: _MovieTitle()),
       const _Score(),
       const _MovieInfo(),
       const _Overview(),
       const _Description(),
-      const _CrewInfo()
+      const _CrewInfo(),
     ]);
   }
 }
@@ -27,27 +27,22 @@ class _Score extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final movieDetails =
-        NotifierProvider.watch<DetailsViewModel>(context)?.movieDetails;
-    final voteAverage = movieDetails?.voteAverage ?? 0;
-    final videos = movieDetails?.videos?.results
-        .where((video) => video.type == "Trailer" && video.site == "YouTube");
-    final trailerKey = videos?.isNotEmpty == true ? videos?.first.key : null;
+    final scoreData =
+        context.select((DetailsViewModel vm) => vm.data.scoreData);
 
-    final score = (voteAverage * 10).round() / 10;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         TextButton(
             onPressed: () {},
-            child: Text("$score / 10 User Score",
+            child: Text("${scoreData.voteAverage} / 10 User Score",
                 style: BaseTextStyle.baseSimilarBoldText(Colors.lightBlue))),
         Container(width: 1, height: 15, color: Colors.white),
-        trailerKey != null
+        scoreData.trailerKey != null
             ? TextButton(
                 onPressed: () => Navigator.pushNamed(
                     context, MainNavigationRoutesNames.movieTrailer,
-                    arguments: trailerKey),
+                    arguments: scoreData.trailerKey),
                 child: Text("Play Trailer",
                     style: BaseTextStyle.baseSimilarBoldText(Colors.lightBlue)))
             : const SizedBox.shrink()
@@ -61,10 +56,8 @@ class _CrewInfo extends StatelessWidget {
 
   @override
   build(BuildContext context) {
-    final List<List<Crew>> crewChunks =
-        NotifierProvider.watch<DetailsViewModel>(context)
-            ?.movieDetails
-            ?.crewChunks;
+    final List<List<CrewUi>> crewChunks =
+        context.select((DetailsViewModel vm) => vm.data.crewData);
 
     return Column(
       children: crewChunks
@@ -80,7 +73,7 @@ class _CrewInfo extends StatelessWidget {
 class _CrewRow extends StatelessWidget {
   const _CrewRow({required this.crewList});
 
-  final List<Crew> crewList;
+  final List<CrewUi> crewList;
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +89,7 @@ class _CrewRow extends StatelessWidget {
 class _CrewRowItem extends StatelessWidget {
   const _CrewRowItem({required this.crew});
 
-  final Crew crew;
+  final CrewUi crew;
 
   @override
   Widget build(BuildContext context) {
@@ -106,9 +99,8 @@ class _CrewRowItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(crew.name ?? "",
-              style: BaseTextStyle.baseSimilarText(Colors.white)),
-          Text(crew.job ?? "", style: jobStyle),
+          Text(crew.name, style: BaseTextStyle.baseSimilarText(Colors.white)),
+          Text(crew.job, style: jobStyle),
         ],
       ),
     );
@@ -120,12 +112,10 @@ class _Description extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model =
-        NotifierProvider.watch<DetailsViewModel>(context)?.movieDetails;
+    final overview = context.select((DetailsViewModel vm) => vm.data.overview);
     return Padding(
       padding: const EdgeInsets.all(8),
-      child: Text(model?.overview ?? "",
-          style: BaseTextStyle.baseSimilarText(Colors.white)),
+      child: Text(overview, style: BaseTextStyle.baseSimilarText(Colors.white)),
     );
   }
 }
@@ -145,35 +135,36 @@ class _Overview extends StatelessWidget {
 }
 
 class _TopPoster extends StatelessWidget {
+  const _TopPoster();
+
   @override
   Widget build(BuildContext context) {
-    final model = NotifierProvider.watch<DetailsViewModel>(context);
-    final backdropPath = model?.movieDetails?.backdrop;
-    final posterPath = model?.movieDetails?.poster;
-    final saveIcon = model!.isMovieSaved == true
-        ? const Icon(Icons.bookmark, color: Colors.yellow)
-        : const Icon(Icons.bookmark_add, color: Colors.white);
+    final viewModel = context.read<DetailsViewModel>();
+    final posterData =
+        context.select((DetailsViewModel vm) => vm.data.posterData);
+    final backdropPath = posterData.backdropPath;
+    final posterPath = posterData.posterPath;
 
     return AspectRatio(
       aspectRatio: 390 / 219,
       child: Stack(
         children: [
-          backdropPath != null
-              ? Image.network(backdropPath,
-                  width: double.infinity, fit: BoxFit.fitWidth)
-              : const SizedBox.shrink(),
-          Positioned(
-            top: 20,
-            left: 20,
-            bottom: 20,
-            child: Image.network(posterPath),
-          ),
+          if (backdropPath != null)
+            Image.network(backdropPath,
+                width: double.infinity, fit: BoxFit.fitWidth),
+          if (posterPath != null)
+            Positioned(
+              top: 20,
+              left: 20,
+              bottom: 20,
+              child: Image.network(posterPath),
+            ),
           Positioned(
               top: 20,
               right: 5,
               child: IconButton(
-                icon: saveIcon,
-                onPressed: () => model.toggleSave(),
+                icon: posterData.favoriteIcon,
+                onPressed: () => viewModel.toggleSave(context),
               ))
         ],
       ),
@@ -181,11 +172,11 @@ class _TopPoster extends StatelessWidget {
   }
 }
 
-class _MovieName extends StatelessWidget {
+class _MovieTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final model =
-        NotifierProvider.watch<DetailsViewModel>(context)?.movieDetails;
+    final titleData =
+        context.select((DetailsViewModel vm) => vm.data.titleData);
     return Center(
       child: RichText(
         textAlign: TextAlign.center,
@@ -193,10 +184,10 @@ class _MovieName extends StatelessWidget {
         text: TextSpan(
           children: <TextSpan>[
             TextSpan(
-                text: model?.title,
+                text: titleData.title,
                 style: BaseTextStyle.baseTitleText(Colors.white)),
             TextSpan(
-              text: " (${model?.releaseDate?.year})",
+              text: " (${titleData.year})",
               style: BaseTextStyle.baseTitleText(Colors.white),
             )
           ],
@@ -211,14 +202,13 @@ class _MovieInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model =
-        NotifierProvider.watch<DetailsViewModel>(context)?.movieDetails;
+    final allInfo = context.select((DetailsViewModel vm) => vm.data.allInfo);
     return ColoredBox(
       color: const Color.fromRGBO(22, 21, 25, 1.0),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 60),
         child: Text(
-          model?.allInfo,
+          allInfo,
           textAlign: TextAlign.center,
           maxLines: 3,
           style: BaseTextStyle.baseSimilarText(Colors.white),

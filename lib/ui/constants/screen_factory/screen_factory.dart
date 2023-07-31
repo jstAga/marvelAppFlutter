@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:marvel_app_flutter/ui/constants/bases/base_providers.dart';
 import 'package:marvel_app_flutter/ui/widgets/auth/auth_view_model.dart';
 import 'package:marvel_app_flutter/ui/widgets/auth/auth_widget.dart';
 import 'package:marvel_app_flutter/ui/widgets/details/details_view_model.dart';
@@ -30,15 +29,15 @@ class ScreenFactory {
   }
 
   Widget createHomeWidget() {
-    return NotifierProvider(
-      create: () => HomeViewModel(),
+    return ChangeNotifierProvider(
+      create: (_) => HomeViewModel(),
       child: const HomeWidget(),
     );
   }
 
   Widget createMovieDetailsWidget(int movieId) {
-    return NotifierProvider(
-        create: () => DetailsViewModel(movieId: movieId),
+    return ChangeNotifierProvider(
+        create: (_) => DetailsViewModel(movieId: movieId),
         child: const DetailsWidget());
   }
 

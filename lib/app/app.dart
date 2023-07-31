@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:marvel_app_flutter/ui/constants/movie_db_constants.dart';
+import 'package:marvel_app_flutter/ui/constants/constants.dart';
 import 'package:marvel_app_flutter/ui/main_navigation/main_navigation.dart';
 
 class App extends StatelessWidget {
