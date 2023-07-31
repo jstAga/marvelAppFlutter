@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:marvel_app_flutter/data/remote/entity/credits/credits_entity.dart';
 import 'package:marvel_app_flutter/data/remote/entity/data_ext.dart';
 import 'package:marvel_app_flutter/data/remote/entity/trailer/trailer_entity.dart';
 import 'package:marvel_app_flutter/data/core/network/configurations.dart';
+import 'package:marvel_app_flutter/ui/entity/movie_details/movie_details_ui.dart';
 
 part 'movie_details.g.dart';
 
@@ -78,7 +78,7 @@ class MovieDetailsEntity {
     }
   }
 
-  get _allGenres {
+  String get _allGenres {
     String result = "";
     if (genres == null) result = "No genres";
 
@@ -92,11 +92,13 @@ class MovieDetailsEntity {
     return result;
   }
 
-  get crewChunks {
-    var crew = credits?.crew;
-    if (crew == null || crew.isEmpty) return const SizedBox.shrink();
+  List<List<CrewUi>> get crewChunks {
+    var crew = credits?.crew
+        .map((e) => CrewUi(name: e.name ?? "Unknown", job: e.job ?? "Unknown"))
+        .toList();
+    if (crew == null) return [];
     crew = crew.length > 4 ? crew.sublist(0, 3) : crew;
-    var crewChunks = <List<Crew>>[];
+    var crewChunks = <List<CrewUi>>[];
     for (var i = 0; i < crew.length; i++) {
       crewChunks
           .add(crew.sublist(i, i + 2 > crew.length ? crew.length : i + 2));

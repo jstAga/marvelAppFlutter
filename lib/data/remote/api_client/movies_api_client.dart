@@ -1,10 +1,9 @@
 import 'dart:io';
 
 import 'package:marvel_app_flutter/data/core/network/base_api_client.dart';
-import 'package:marvel_app_flutter/data/remote/entity/detail_movie/movie_details.dart';
+import 'package:marvel_app_flutter/data/remote/entity/movie_details/movie_details.dart';
 import 'package:marvel_app_flutter/data/remote/entity/movie_response/movie_response.dart';
 import 'package:marvel_app_flutter/data/core/network/configurations.dart';
-
 
 class MoviesApiClient {
   final _apiClient = BaseApiClient(
@@ -25,8 +24,8 @@ class MoviesApiClient {
   }
 
   Future<MovieResponse> getMovies(int page, String language) async {
-    final result = _apiClient.get(
-        Configurations.getMovies, _movieResponseParser1, <String, dynamic>{
+    final result = _apiClient
+        .get(Configurations.getMovies, _movieResponseParser1, <String, dynamic>{
       "api_key": Configurations.apiKey,
       "page": page.toString(),
       "language": language,
@@ -52,8 +51,7 @@ class MoviesApiClient {
   }
 
   Future<MovieDetailsEntity> getDetails(int movieId, String language) {
-    final result = _apiClient.get(
-        "${Configurations.movieDetails}$movieId?",
+    final result = _apiClient.get("${Configurations.movieDetails}$movieId?",
         _movieDetailsParser, <String, dynamic>{
       "api_key": Configurations.apiKey,
       "language": language,
@@ -87,8 +85,8 @@ class MoviesApiClient {
       return 1;
     }
 
-    final result = _apiClient
-        .post("/account/$accountId/favorite?", parser, <String, dynamic>{
+    final result = _apiClient.post(
+        "/account/$accountId/favorite?", parser, <String, dynamic>{
       "media_type": mediaType.asString(),
       "media_id": mediaId,
       "favorite": isSaved

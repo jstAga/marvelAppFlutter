@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:marvel_app_flutter/ui/constants/bases/base_providers.dart';
 import 'package:marvel_app_flutter/ui/constants/bases/bases_ext.dart';
 import 'package:marvel_app_flutter/ui/widgets/details/details_view_model.dart';
+import 'package:provider/provider.dart';
 
 class DetailsCastWidget extends StatelessWidget {
   const DetailsCastWidget({Key? key}) : super(key: key);
@@ -59,8 +59,8 @@ class _CastItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = NotifierProvider.read<DetailsViewModel>(context);
-    final cast = model!.movieDetails!.credits!.cast[index];
+    final cast =
+        context.select((DetailsViewModel vm) => vm.data.castData[index]);
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: DecoratedBox(

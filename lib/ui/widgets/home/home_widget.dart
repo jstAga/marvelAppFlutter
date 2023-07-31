@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:marvel_app_flutter/data/local/data_provider/session_data_provider.dart';
 import 'package:marvel_app_flutter/ui/constants/screen_factory/screen_factory.dart';
-import 'package:marvel_app_flutter/ui/constants/movie_db_constants.dart';
+import 'package:marvel_app_flutter/ui/constants/constants.dart';
 
 class HomeWidget extends StatefulWidget {
   const HomeWidget({Key? key}) : super(key: key);
@@ -28,7 +27,7 @@ class _HomeWidgetState extends State<HomeWidget> {
         title: const Text(MovieDbConstants.theMovieDbHomeTitle),
         actions: [
           IconButton(
-              onPressed: () => SessionDataProvider().setSessionId(null),
+              onPressed: () {},
               icon: const Icon(Icons.logout))
         ],
       ),

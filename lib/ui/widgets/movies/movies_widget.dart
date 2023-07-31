@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:marvel_app_flutter/ui/constants/movie_db_constants.dart';
+import 'package:marvel_app_flutter/ui/constants/constants.dart';
 import 'package:marvel_app_flutter/ui/widgets/movies/movies_view_model.dart';
 import 'package:provider/provider.dart';
 

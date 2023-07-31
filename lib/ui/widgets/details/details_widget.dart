@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:marvel_app_flutter/app/app_view_model.dart';
-import 'package:marvel_app_flutter/ui/constants/bases/base_providers.dart';
 import 'package:marvel_app_flutter/ui/widgets/details/details_cast_widget.dart';
 import 'package:marvel_app_flutter/ui/widgets/details/details_main_widget.dart';
 import 'package:marvel_app_flutter/ui/widgets/details/details_view_model.dart';
+import 'package:provider/provider.dart';
 
 class DetailsWidget extends StatefulWidget {
   const DetailsWidget({super.key});
@@ -14,18 +13,10 @@ class DetailsWidget extends StatefulWidget {
 
 class _DetailsWidgetState extends State<DetailsWidget> {
   @override
-  void initState() {
-    super.initState();
-    final model = NotifierProvider.read<DetailsViewModel>(context);
-    final appModel = InheritedProvider.read<AppViewModel>(context);
-    model?.onSessionExpired = () => appModel?.resetSession(context);
-  }
-
-  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    NotifierProvider.read<DetailsViewModel>(context)
-        ?.setupLocalization(context);
+    Future.microtask(
+        () => context.read<DetailsViewModel>().setupLocalization(context));
   }
 
   @override
@@ -47,9 +38,9 @@ class _Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final movieDetails =
-        NotifierProvider.watch<DetailsViewModel>(context)?.movieDetails;
-    if (movieDetails == null) {
+    final isLoading =
+        context.select((DetailsViewModel vm) => vm.data.isLoading);
+    if (isLoading) {
       return const Center(child: CircularProgressIndicator());
     } else {
       return ListView(
@@ -68,8 +59,7 @@ class _Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model =
-        NotifierProvider.watch<DetailsViewModel>(context)?.movieDetails;
-    return Text(model?.title ?? "Loading", maxLines: 1);
+    final title = context.select((DetailsViewModel vm) => vm.data.title);
+    return Text(title, maxLines: 1);
   }
 }
