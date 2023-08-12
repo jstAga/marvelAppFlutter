@@ -144,6 +144,8 @@ class _TopPoster extends StatelessWidget {
         context.select((DetailsViewModel vm) => vm.data.posterData);
     final backdropPath = posterData.backdropPath;
     final posterPath = posterData.posterPath;
+    final favoriteIcon = context
+        .select((DetailsViewModel vm) => vm.data.posterData.favoriteIcon);
 
     return AspectRatio(
       aspectRatio: 390 / 219,
@@ -163,7 +165,7 @@ class _TopPoster extends StatelessWidget {
               top: 20,
               right: 5,
               child: IconButton(
-                icon: posterData.favoriteIcon,
+                icon: favoriteIcon,
                 onPressed: () => viewModel.toggleSave(context),
               ))
         ],

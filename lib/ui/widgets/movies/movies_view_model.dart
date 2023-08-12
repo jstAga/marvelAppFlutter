@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:marvel_app_flutter/data/remote/entity/movie/movie_entity.dart';
 import 'package:marvel_app_flutter/ui/constants/bases/base_paging.dart';
+import 'package:marvel_app_flutter/ui/constants/localized_model_storage.dart';
 import 'package:marvel_app_flutter/ui/entity/movie/movie_ui.dart';
 import 'package:marvel_app_flutter/ui/main_navigation/main_navigation.dart';
 import 'package:marvel_app_flutter/ui/widgets/movies/repository/movie_repository.dart';
@@ -11,7 +12,8 @@ import 'package:marvel_app_flutter/ui/widgets/movies/repository/movie_repository
 class MoviesViewModel extends ChangeNotifier {
   MoviesViewModel() {
     _moviesPaging = BasePaging<MovieEntity>(load: (int nextPage) async {
-      final result = await _moviesRepository.getMovies(nextPage, _local);
+      final result =
+          await _moviesRepository.getMovies(nextPage, _localeStorage.localeTag);
 
       return BasePagingResponse(
           data: result.results,
@@ -21,7 +23,7 @@ class MoviesViewModel extends ChangeNotifier {
 
     _searchMoviesPaging = BasePaging<MovieEntity>(load: (int nextPage) async {
       final result = await _moviesRepository.searchMovies(
-          _searchQuery ?? "", nextPage, _local);
+          _searchQuery ?? "", nextPage, _localeStorage.localeTag);
       return BasePagingResponse(
           data: result.results,
           currentPage: result.page,
@@ -34,7 +36,7 @@ class MoviesViewModel extends ChangeNotifier {
   late final BasePaging<MovieEntity> _moviesPaging;
   late final BasePaging<MovieEntity> _searchMoviesPaging;
   var _movies = <MovieUi>[];
-  String _local = "";
+  final _localeStorage = LocalizedModelStorage();
   String? _searchQuery;
   Timer? searchTimer;
 
@@ -54,18 +56,16 @@ class MoviesViewModel extends ChangeNotifier {
         arguments: id);
   }
 
-  Future<void> setupLocalization(BuildContext context) async {
-    final local = Localizations.localeOf(context).toLanguageTag();
-    if (_local == local) return;
-    _local = local;
-    _date = DateFormat.yMMMd(local);
+  Future<void> setupLocalization(Locale locale) async {
+    if (!_localeStorage.updateLocale(locale)) return;
+    _date = DateFormat.yMMMd(_localeStorage.localeTag);
     await _resetMovies();
   }
 
   MovieUi _toMovieUi(MovieEntity movie) {
     final releaseDate = movie.releaseDate;
     final releaseDateTitle =
-    releaseDate != null ? _date.format(releaseDate) : "";
+        releaseDate != null ? _date.format(releaseDate) : "";
     return MovieUi(
         title: movie.title,
         releaseDate: releaseDateTitle,

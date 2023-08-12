@@ -15,8 +15,10 @@ class _DetailsWidgetState extends State<DetailsWidget> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    Future.microtask(
-        () => context.read<DetailsViewModel>().setupLocalization(context));
+
+    final locale = Localizations.localeOf(context);
+    Future.microtask(() =>
+        context.read<DetailsViewModel>().setupLocalization(context, locale));
   }
 
   @override

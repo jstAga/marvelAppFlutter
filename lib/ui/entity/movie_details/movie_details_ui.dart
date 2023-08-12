@@ -3,6 +3,8 @@ import 'package:marvel_app_flutter/data/remote/entity/credits/credits_entity.dar
 import 'package:marvel_app_flutter/data/remote/entity/movie_details/movie_details.dart';
 
 class MovieDetailsUi {
+  MovieDetailsUi();
+
   String title = "";
   bool isLoading = true;
   String overview = "";
@@ -20,7 +22,11 @@ class MovieDetailsUi {
   List<List<CrewUi>> crewData = [];
   List<CastUi> castData = [];
 
-  MovieDetailsUi();
+  void changeSaveIcon(bool isMovieSaved){
+    posterData.favoriteIcon = isMovieSaved
+        ? const Icon(Icons.bookmark_add, color: Colors.white)
+        : const Icon(Icons.bookmark, color: Colors.yellow);
+  }
 
   MovieDetailsUi.toUiFromEntity(MovieDetailsEntity? details, bool isMovieSaved)
       : title = details?.title ?? "Loading...",
@@ -44,7 +50,7 @@ class MovieDetailsUi {
 class MovieDetailsPosterUi {
   final String? posterPath;
   final String? backdropPath;
-  final Icon favoriteIcon;
+   Icon favoriteIcon;
 
   MovieDetailsPosterUi({
     this.posterPath,
