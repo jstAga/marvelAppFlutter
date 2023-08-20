@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:marvel_app_flutter/ui/constants/screen_factory/screen_factory.dart';
 import 'package:marvel_app_flutter/ui/constants/constants.dart';
+import 'package:marvel_app_flutter/ui/widgets/auth/auth_repository/auth_repository.dart';
 
 class HomeWidget extends StatefulWidget {
   const HomeWidget({Key? key}) : super(key: key);
@@ -27,7 +28,10 @@ class _HomeWidgetState extends State<HomeWidget> {
         title: const Text(MovieDbConstants.theMovieDbHomeTitle),
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                final repo = AuthRepository();
+                repo.logout();
+              },
               icon: const Icon(Icons.logout))
         ],
       ),
