@@ -1,29 +1,53 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:marvel_app_flutter/ui/constants/bases/bases_ext.dart';
 import 'package:marvel_app_flutter/ui/constants/constants.dart';
-import 'package:marvel_app_flutter/ui/widgets/auth/auth_view_model.dart';
+import 'package:marvel_app_flutter/ui/main_navigation/main_navigation.dart';
+import 'package:marvel_app_flutter/ui/widgets/auth/cubit/auth_view_cubit.dart';
+import 'package:marvel_app_flutter/ui/widgets/auth/cubit/auth_view_cubit_state.dart';
 import 'package:provider/provider.dart';
+
+class _AuthDataStorage {
+  String login = "";
+  String password = "";
+}
 
 class AuthWidget extends StatelessWidget {
   const AuthWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-            backgroundColor: MovieDbConstants.theMovieDbBackground,
-            title: const Text(
-              MovieDbConstants.theMovieDbAuthAppBar,
+    return BlocListener<AuthViewCubit, AuthViewCubitState>(
+      listenWhen: (_, current) => current is AuthViwCubitSuccessState,
+      listener: (context, state) => _onAuthViewCubitStateChange(context, state),
+      child: Provider(
+        create: (_) => _AuthDataStorage(),
+        child: Scaffold(
+            appBar: AppBar(
+                backgroundColor: MovieDbConstants.theMovieDbBackground,
+                title: const Text(
+                  MovieDbConstants.theMovieDbAuthAppBar,
+                )),
+            body: ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                _LoginForm(),
+                const SizedBox(height: 24),
+                const _MainContainer(),
+              ],
             )),
-        body: ListView(
-          padding: const EdgeInsets.all(16),
-          children: const [
-            _LoginForm(),
-            SizedBox(height: 24),
-            _MainContainer(),
-          ],
-        ));
+      ),
+    );
+  }
+
+  void _onAuthViewCubitStateChange(
+    BuildContext context,
+    AuthViewCubitState state,
+  ) {
+    if (state is AuthViwCubitSuccessState) {
+      MainNavigation.resetNavigation(context);
+    }
   }
 }
 
@@ -59,11 +83,15 @@ class _MainContainer extends StatelessWidget {
 }
 
 class _LoginForm extends StatelessWidget {
-  const _LoginForm({Key? key}) : super(key: key);
+  _LoginForm();
+
+  final loginTextController = TextEditingController();
+
+  final passwordTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.read<AuthViewModel>();
+    final authDataStorage = context.read<_AuthDataStorage>();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -72,14 +100,14 @@ class _LoginForm extends StatelessWidget {
             style: BaseTextStyle.baseSimilarText(Colors.black)),
         TextField(
             decoration: MovieDbConstants.authInputDecoration,
-            controller: viewModel.usernameTextController),
+            onChanged: (text) => authDataStorage.login = text),
         const SizedBox(height: 16),
         Text(MovieDbConstants.theMovieDbPassword,
             style: BaseTextStyle.baseSimilarText(Colors.black)),
         TextField(
             decoration: MovieDbConstants.authInputDecoration,
             obscureText: true,
-            controller: viewModel.passwordTextController),
+            onChanged: (text) => authDataStorage.password = text),
         const SizedBox(height: 24),
         Row(
           children: [
@@ -99,11 +127,18 @@ class _LoginForm extends StatelessWidget {
 class _AuthButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final model = context.watch<AuthViewModel>();
-    final onPressed =
-        model.canStartAuth == true ? () => model.auth(context) : null;
-    final Widget child;
-    child = model.isAuthInProgress == true
+    final cubit = context.watch<AuthViewCubit>();
+    final isCanStartAuth = cubit.state is AuthViwCubitFormInProgressState ||
+        cubit.state is AuthViwCubitErrorState;
+
+    final authDataStorage = context.read<_AuthDataStorage>();
+
+    final onPressed = isCanStartAuth == true
+        ? () => cubit.auth(
+            login: authDataStorage.login, password: authDataStorage.password)
+        : null;
+
+    final Widget child = cubit.state is AuthViwCubitProgressState
         ? MovieDbConstants.loadingButton
         : const Text(MovieDbConstants.theMovieDbLogin);
     return ElevatedButton(
@@ -118,7 +153,10 @@ class _ErrorMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final errorMessage = context.select((AuthViewModel vm) => vm.errorMessage);
+    final errorMessage = context.select((AuthViewCubit c) {
+      final state = c.state;
+      return state is AuthViwCubitErrorState ? state.errorMessage : null;
+    });
     if (errorMessage == null) return const SizedBox.shrink();
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),

@@ -26,6 +26,7 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
 
   Future<void> _onAuthCheckStatusEvent(
       AuthCheckStatusEvent event, Emitter<AuthState> emit) async {
+    emit(AuthInProgressState());
     final sessionId = await _sessionDataProvider.getSessionId();
     final newState =
         sessionId != null ? AuthAuthorizedState() : AuthUnauthorizedState();
@@ -34,6 +35,7 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
 
   Future<void> _onAuthLoginEvent(AuthLoginEvent event, Emitter<AuthState> emit) async {
     try {
+      emit(AuthInProgressState());
       final sessionId = await _authApiClient.auth(
           username: event.login, password: event.password);
       final accountId = await _accountApiClient.getAccountInfo(sessionId);
