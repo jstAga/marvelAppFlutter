@@ -60,9 +60,3 @@ class AuthCheckInProgressState extends AuthState{
   @override
   int get hashCode => 0;
 }
-
-enum AuthStatusState {
-  authorized,
-  notAuthorized,
-  inProgress,
-}
