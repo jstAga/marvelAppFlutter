@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:marvel_app_flutter/blocs/auth_bloc/auth_bloc.dart';
 import 'package:marvel_app_flutter/blocs/auth_bloc/auth_state.dart';
+import 'package:marvel_app_flutter/blocs/movies_bloc/movies_bloc.dart';
+import 'package:marvel_app_flutter/blocs/movies_bloc/movies_state.dart';
 import 'package:marvel_app_flutter/ui/widgets/auth/cubit/auth_view_cubit.dart';
 import 'package:marvel_app_flutter/ui/widgets/auth/auth_widget.dart';
 import 'package:marvel_app_flutter/ui/widgets/auth/cubit/auth_view_cubit_state.dart';
@@ -9,7 +11,7 @@ import 'package:marvel_app_flutter/ui/widgets/details/details_view_model.dart';
 import 'package:marvel_app_flutter/ui/widgets/details/details_widget.dart';
 import 'package:marvel_app_flutter/ui/widgets/home/home_view_model.dart';
 import 'package:marvel_app_flutter/ui/widgets/home/home_widget.dart';
-import 'package:marvel_app_flutter/ui/widgets/movies/movies_view_model.dart';
+import 'package:marvel_app_flutter/ui/widgets/movies/cubit/movie_list_cubit.dart';
 import 'package:marvel_app_flutter/ui/widgets/movies/movies_widget.dart';
 import 'package:marvel_app_flutter/ui/widgets/splash_screen/loader_view_cubit.dart';
 import 'package:marvel_app_flutter/ui/widgets/splash_screen/loader_widget.dart';
@@ -58,8 +60,9 @@ class ScreenFactory {
   }
 
   Widget createMoviesWidget() {
-    return ChangeNotifierProvider(
-      create: (_) => MoviesViewModel(),
+      final moviesBloc = MoviesBloc(const MoviesState.initial());
+    return BlocProvider(
+      create: (_) => MovieListCubit(moviesBloc: moviesBloc),
       child: const MoviesWidget(),
     );
   }

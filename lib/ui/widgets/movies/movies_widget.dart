@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:marvel_app_flutter/ui/constants/constants.dart';
-import 'package:marvel_app_flutter/ui/widgets/movies/movies_view_model.dart';
+import 'package:marvel_app_flutter/ui/main_navigation/main_navigation.dart';
+import 'package:marvel_app_flutter/ui/widgets/movies/cubit/movie_list_cubit.dart';
 import 'package:provider/provider.dart';
 
 class MoviesWidget extends StatefulWidget {
@@ -14,8 +15,8 @@ class _MoviesWidgetState extends State<MoviesWidget> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final locale = Localizations.localeOf(context);
-    context.read<MoviesViewModel>().setupLocalization(locale);
+    final locale = Localizations.localeOf(context).languageCode;
+    context.read<MovieListCubit>().setupLocale(locale);
   }
 
   @override
@@ -31,15 +32,15 @@ class _MovieListBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.watch<MoviesViewModel>();
+    final cubit = context.watch<MovieListCubit>();
 
     return ListView.builder(
         padding: const EdgeInsets.only(top: 70),
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        itemCount: viewModel.movies.length,
+        itemCount: cubit.state.movies.length,
         itemExtent: 163,
         itemBuilder: (BuildContext context, int index) {
-          viewModel.getCurrentMovieIndex(index);
+          cubit.getCurrentMovieIndex(index);
           return _MovieItem(index: index);
         });
   }
@@ -97,14 +98,20 @@ class _ItemBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.read<MoviesViewModel>();
+    final cubit = context.read<MovieListCubit>();
+    final id = cubit.state.movies[index].id?.toInt();
     return Material(
       color: Colors.transparent,
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        onTap: () => viewModel.toDetail(context, index),
+        onTap: () => _toDetail(context, id!),
       ),
     );
+  }
+
+  void _toDetail(BuildContext context, int id) {
+    Navigator.pushNamed(context, MainNavigationRoutesNames.movieDetail,
+        arguments: id);
   }
 }
 
@@ -117,8 +124,8 @@ class _MovieDate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.read<MoviesViewModel>();
-    final movie = viewModel.movies[index];
+    final cubit = context.read<MovieListCubit>();
+    final movie = cubit.state.movies[index];
     return Text(
       movie.releaseDate ?? "",
       maxLines: 1,
@@ -136,8 +143,8 @@ class _MoviePoster extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.read<MoviesViewModel>();
-    final movie = viewModel.movies[index];
+    final cubit = context.read<MovieListCubit>();
+    final movie = cubit.state.movies[index];
     return Image.network(
       movie.image ?? "",
       width: 95,
@@ -152,8 +159,8 @@ class _MovieOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.read<MoviesViewModel>();
-    final movie = viewModel.movies[index];
+    final cubit = context.read<MovieListCubit>();
+    final movie = cubit.state.movies[index];
     return Text(
       movie.overview ?? "No description",
       maxLines: 3,
@@ -171,8 +178,8 @@ class _MovieTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.read<MoviesViewModel>();
-    final movie = viewModel.movies[index];
+    final cubit = context.read<MovieListCubit>();
+    final movie = cubit.state.movies[index];
     return Text(movie.title ?? "No title",
         maxLines: 1,
         style:
@@ -185,11 +192,11 @@ class _Search extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.read<MoviesViewModel>();
+    final cubit = context.read<MovieListCubit>();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       child: TextField(
-        onChanged: viewModel.searchMovies,
+        onChanged: cubit.searchMovie,
         // controller: _searchController,
         decoration: InputDecoration(
             labelText: "Search",
