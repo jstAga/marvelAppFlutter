@@ -38,7 +38,7 @@ class MovieRepository {
 
     if (sessionId == null || accountId == null) return;
 
-    await _moviesApiClient.saveMovie(
+    await _accountApiClient.saveMovie(
         accountId: accountId,
         sessionId: sessionId,
         mediaType: MediaType.movie,
