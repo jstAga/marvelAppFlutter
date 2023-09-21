@@ -1,14 +1,12 @@
 import 'dart:io';
 
+import 'package:get_it/get_it.dart';
 import 'package:marvel_app_flutter/data/core/network/base_api_client.dart';
 import 'package:marvel_app_flutter/data/core/network/configurations.dart';
 
 
 class AuthApiClient {
-  final _apiClient = BaseApiClient(
-      host: Configurations.baseUrl,
-      client: HttpClient(),
-      apiKey: Configurations.apiKey);
+  final _apiClient = GetIt.instance<BaseApiClient>();
 
   Future<String> auth(
       {required String username, required String password}) async {

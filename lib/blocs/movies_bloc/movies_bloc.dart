@@ -2,13 +2,14 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:get_it/get_it.dart';
 import 'package:marvel_app_flutter/blocs/movies_bloc/movies_events.dart';
 import 'package:marvel_app_flutter/blocs/movies_bloc/movies_state.dart';
 import 'package:marvel_app_flutter/data/remote/api_client/movies_api_client.dart';
 import 'package:marvel_app_flutter/data/remote/entity/movie_response/movie_response.dart';
 
 class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
-  final _moviesApiClient = MoviesApiClient();
+  final _moviesApiClient = GetIt.instance<MoviesApiClient>();
 
   MoviesBloc(MoviesState initialState) : super(initialState) {
     on<MoviesEvent>((event, emit) async {

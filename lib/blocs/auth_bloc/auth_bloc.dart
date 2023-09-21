@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:get_it/get_it.dart';
 import 'package:marvel_app_flutter/blocs/auth_bloc/auth_events.dart';
 import 'package:marvel_app_flutter/blocs/auth_bloc/auth_state.dart';
 import 'package:marvel_app_flutter/data/local/data_provider/session_data_provider.dart';
@@ -7,9 +8,9 @@ import 'package:marvel_app_flutter/data/remote/api_client/account_api_client.dar
 import 'package:marvel_app_flutter/data/remote/api_client/auth_api_client.dart';
 
 class AuthBloc extends Bloc<AuthEvents, AuthState> {
-  final _authApiClient = AuthApiClient();
-  final _accountApiClient = AccountApiClient();
-  final _sessionDataProvider = SessionDataProvider();
+  final _authApiClient = GetIt.instance<AuthApiClient>();
+  final _accountApiClient = GetIt.instance<AccountApiClient>();
+  final _sessionDataProvider = GetIt.instance<SessionDataProvider>();
 
   AuthBloc(AuthState initialState) : super(initialState) {
     on<AuthEvents>((event, emit) async {
@@ -33,7 +34,8 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
     emit(newState);
   }
 
-  Future<void> _onAuthLoginEvent(AuthLoginEvent event, Emitter<AuthState> emit) async {
+  Future<void> _onAuthLoginEvent(
+      AuthLoginEvent event, Emitter<AuthState> emit) async {
     try {
       emit(AuthInProgressState());
       final sessionId = await _authApiClient.auth(
@@ -47,7 +49,8 @@ class AuthBloc extends Bloc<AuthEvents, AuthState> {
     }
   }
 
-  Future<void> _onAuthLogoutEvent(AuthLogoutEvent event, Emitter<AuthState> emit) async {
+  Future<void> _onAuthLogoutEvent(
+      AuthLogoutEvent event, Emitter<AuthState> emit) async {
     try {
       await _sessionDataProvider.deleteSessionId();
       await _sessionDataProvider.deleteSessionId();

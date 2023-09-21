@@ -1,15 +1,11 @@
-import 'dart:io';
-
+import 'package:get_it/get_it.dart';
 import 'package:marvel_app_flutter/data/core/network/base_api_client.dart';
 import 'package:marvel_app_flutter/data/remote/entity/movie_details/movie_details.dart';
 import 'package:marvel_app_flutter/data/remote/entity/movie_response/movie_response.dart';
 import 'package:marvel_app_flutter/data/core/network/configurations.dart';
 
 class MoviesApiClient {
-  final _apiClient = BaseApiClient(
-      host: Configurations.baseUrl,
-      client: HttpClient(),
-      apiKey: Configurations.apiKey);
+  final _apiClient = GetIt.instance<BaseApiClient>();
 
   MovieResponse _movieResponseParser(dynamic json) {
     final jsonMap = json as Map<String, dynamic>;
@@ -74,6 +70,4 @@ class MoviesApiClient {
     });
     return result;
   }
-
-
 }

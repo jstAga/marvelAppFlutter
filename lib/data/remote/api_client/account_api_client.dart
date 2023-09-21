@@ -1,13 +1,9 @@
-import 'dart:io';
-
+import 'package:get_it/get_it.dart';
 import 'package:marvel_app_flutter/data/core/network/base_api_client.dart';
 import 'package:marvel_app_flutter/data/core/network/configurations.dart';
 
-class AccountApiClient{
-  final _apiClient = BaseApiClient(
-      host: Configurations.baseUrl,
-      client: HttpClient(),
-      apiKey: Configurations.apiKey);
+class AccountApiClient {
+  final _apiClient = GetIt.instance<BaseApiClient>();
 
   int _getAccountInfo(dynamic json) {
     final jsonMap = json as Map<String, dynamic>;
@@ -26,10 +22,10 @@ class AccountApiClient{
 
   Future<int> saveMovie(
       {required int accountId,
-        required String sessionId,
-        required MediaType mediaType,
-        required int mediaId,
-        required bool isSaved}) async {
+      required String sessionId,
+      required MediaType mediaType,
+      required int mediaId,
+      required bool isSaved}) async {
     parser(dynamic json) {
       return 1;
     }
