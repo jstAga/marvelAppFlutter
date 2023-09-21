@@ -1,4 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get_it/get_it.dart';
 
 abstract class _Keys {
   static const sessionId = "session_id";
@@ -6,7 +7,7 @@ abstract class _Keys {
 }
 
 class SessionDataProvider {
-  final _secureStorage = const FlutterSecureStorage();
+  final _secureStorage = GetIt.instance<FlutterSecureStorage>();
 
   Future<String?> getSessionId() => _secureStorage.read(key: _Keys.sessionId);
 
