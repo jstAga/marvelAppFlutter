@@ -54,6 +54,7 @@ class MovieListCubit extends Cubit<MovieListState> {
   }
 
   void getCurrentMovieIndex(int index) {
+    if (index < state.movies.length - 1) return;
     moviesBloc.add(MoviesLoadNextPageEvent(locale: state.localeTag));
   }
 
